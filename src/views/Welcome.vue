@@ -17,7 +17,7 @@ const redirectToQuestions = () => {
 <template>
   <div class="container">
     <div v-if="showLogin">
-      <LoginForm />
+      <LoginForm @login="redirectToQuestions" />
       <p>
         Don't you have an account?
         <button @click="showLogin = false" class="text-blue-300">

@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import useLogin from "../../composables/useLogin";
 
+const { error, login } = useLogin();
+
+// Refs
 const email = ref("");
 const password = ref("");
 
-const onSubmit = () => {
-  console.log(email.value, password.value);
+const emit = defineEmits(["login"]);
+
+const onSubmit = async () => {
+  await login(email.value, password.value);
+
+  if (!error.value) {
+    emit("login");
+  }
 };
 </script>
 
