@@ -1,6 +1,17 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 import Welcome from "../views/Welcome.vue";
 import Questions from "../views/Questions.vue";
+import { auth } from "../firebase/config";
+
+const requireAuth = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    next({ name: "Welcome" })
+  } else {
+    next()
+  }
+}
 
 const routes = [
   {
@@ -11,7 +22,8 @@ const routes = [
   {
     path: "/questions",
     name: "Questions",
-    component: Questions
+    component: Questions,
+    beforeEnter: requireAuth
   }
 ]
 
