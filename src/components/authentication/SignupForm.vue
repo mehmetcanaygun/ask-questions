@@ -1,12 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import useSignup from "../../composables/useSignup";
 
-const email = ref("");
-const username = ref("");
-const password = ref("");
+const { error, signup } = useSignup();
 
-const onSubmit = () => {
-  console.log(email.value, username.value, password.value);
+// Refs
+const email = ref<string>("");
+const username = ref<string>("");
+const password = ref<string>("");
+
+const emit = defineEmits(["signup"]);
+
+const onSubmit = async () => {
+  await signup(email.value, username.value, password.value);
+
+  if (!error.value) {
+    emit("signup");
+  }
 };
 </script>
 

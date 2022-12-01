@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import LoginForm from "../components/authentication/LoginForm.vue";
 import SignupForm from "../components/authentication/SignupForm.vue";
 
 // Refs
 const showLogin = ref<boolean>(true);
+
+const router = useRouter();
+
+const redirectToQuestions = () => {
+  router.push({ name: "Questions" });
+};
 </script>
 
 <template>
@@ -21,7 +28,7 @@ const showLogin = ref<boolean>(true);
     </div>
 
     <div v-else>
-      <SignupForm />
+      <SignupForm @signup="redirectToQuestions" />
       <p>
         Are you already a user?
         <button @click="showLogin = true" class="text-blue-300">Log in</button>
