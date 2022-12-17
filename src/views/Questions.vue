@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import AsyncQuestions from "./asyncViews/AsyncQuestions.vue";
+import Spinner from "../components/layout/Spinner.vue";
 </script>
 
 <template>
   <Suspense>
     <AsyncQuestions #default />
+
     <template #fallback>
-      <h1 class="text-2xl">LOADING...</h1>
+      <Spinner />
     </template>
   </Suspense>
 </template>

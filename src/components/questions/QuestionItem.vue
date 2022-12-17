@@ -2,6 +2,7 @@
 import { PropType } from "vue";
 import { useRouter } from "vue-router";
 import { Question } from "../../types";
+import { formatDistanceToNow } from "date-fns";
 
 const router = useRouter();
 
@@ -18,15 +19,26 @@ const viewDetail = () => {
 </script>
 
 <template>
-  <div class="border" @click="viewDetail">
-    <p>Id: {{ props.question?.id }}</p>
-    <p>Title: {{ props.question?.title }}</p>
-    <p>UserId: {{ props.question?.userId }}</p>
-    <p>createdAt: {{ props.question?.createdAt }}</p>
-    <p>Content: {{ props.question?.content }}</p>
-    <p>Likes: {{ props.question?.likes.length }}</p>
-    <p>Dislikes: {{ props.question?.dislikes.length }}</p>
-    <p>Comments: {{ props.question?.comments }}</p>
+  <div
+    class="bg-blue-200 p-4 mb-2 shadow-md hover:bg-blue-300 cursor-pointer rounded"
+    @click="viewDetail"
+  >
+    <!-- <p>Id: {{ props.question?.id }}</p> -->
+    <p class="text-lg">{{ props.question?.title }}</p>
+    <p class="text-sm text-gray-700">UserId: {{ props.question?.userId }}</p>
+    <p class="text-sm text-gray-700">
+      createdAt:
+      {{
+        props.question?.createdAt &&
+        formatDistanceToNow(props.question?.createdAt.toDate())
+      }}
+    </p>
+    <p>{{ props.question?.content }}</p>
+    <p>
+      Likes: {{ props.question?.likes.length }} - Dislikes:
+      {{ props.question?.dislikes.length }}
+    </p>
+    <!-- <p>Comments: {{ props.question?.comments }}</p> -->
   </div>
 </template>
 
