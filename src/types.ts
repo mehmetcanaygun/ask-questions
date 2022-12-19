@@ -3,6 +3,7 @@ import { Timestamp } from "firebase/firestore";
 export type Comment = {
   id: string;
   userId: string;
+  displayName: string;
   content: string;
   createdAt: Timestamp;
   likes: string[];
@@ -19,4 +20,12 @@ export type Question = {
   likes: string[];
   dislikes: string[];
   comments: Comment[];
+}
+
+export type UpdateQuestionData = {
+  title?: string;
+  content?: string;
+  comments?: Comment[];
+  likes?: string[];
+  dislikes?: string[];
 }
