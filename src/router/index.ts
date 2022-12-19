@@ -7,6 +7,7 @@ import {
 import Welcome from "../views/Welcome.vue";
 import Questions from "../views/Questions.vue";
 import QuestionDetail from "../views/QuestionDetail.vue";
+import NewQuestion from "../views/NewQuestion.vue";
 import { auth } from "../firebase/config";
 
 const requireNoAuth = (
@@ -54,6 +55,12 @@ const routes = [
     path: "/questions/:id",
     name: "Question Detail",
     component: QuestionDetail,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/questions/new",
+    name: "New Question",
+    component: NewQuestion,
     beforeEnter: requireAuth,
   },
 ];

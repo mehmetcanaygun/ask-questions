@@ -23,7 +23,7 @@ const onSignout = async () => {
       </div>
 
       <nav class="flex gap-3" v-if="user">
-        <RouterLink :to="{ name: 'Questions' }">Create</RouterLink>
+        <RouterLink :to="{ name: 'New Question' }">Create</RouterLink>
         <RouterLink :to="{ name: 'Questions' }">My Profile</RouterLink>
         <button @click="onSignout">Log out</button>
       </nav>
