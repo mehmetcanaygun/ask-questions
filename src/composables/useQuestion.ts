@@ -1,5 +1,11 @@
 import { ref } from "vue";
-import { collection, doc, addDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db, timestamp } from "../firebase/config";
 import getUser from "./getUser";
 import useLoading from "./useLoading";
@@ -59,7 +65,16 @@ const useQuestion = () => {
     }
   };
 
-  return { error, addQuestion, updateQuestion };
+  const deleteQuestion = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, "questions", id));
+    } catch (err) {
+      console.log(err);
+      error.value = "Question could not be deleted.";
+    }
+  };
+
+  return { error, addQuestion, updateQuestion, deleteQuestion };
 };
 
 export default useQuestion;

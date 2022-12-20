@@ -10,12 +10,14 @@ import CommentItem from "../../components/questions/CommentItem.vue";
 import Spinner from "../../components/layout/Spinner.vue";
 import { formatDistanceToNow } from "date-fns";
 import { Comment } from "../../types";
+import router from "../../router";
 
 const route = useRoute();
 const questionId = route.params.id as string;
 
 const questionRef = ref();
 const errorRef = ref();
+const ownedRef = ref<boolean>(false);
 
 // Get logged in user
 const { user } = getUser();
@@ -23,10 +25,12 @@ const { user } = getUser();
 // Get loading state
 const { isLoading } = useLoading();
 
-const { updateQuestion, error: useQuestionErr } = useQuestion();
+const { updateQuestion, error: useQuestionErr, deleteQuestion } = useQuestion();
 
 const init = async () => {
   const { question, error } = await getQuestion(questionId);
+
+  ownedRef.value = question.value?.userId === user.value?.uid;
 
   questionRef.value = question.value;
   errorRef.value = error.value;
@@ -158,6 +162,11 @@ const handleLikeDislikeQuestion = async (action: string) => {
   await init();
 };
 
+const onDeleteQuestionClick = async () => {
+  await deleteQuestion(questionRef.value.id);
+  router.push({ name: "Questions" });
+};
+
 await init();
 </script>
 
@@ -171,6 +180,14 @@ await init();
 
     <!-- Questıon -->
     <div class="border p-2 mb-4">
+      <button
+        v-if="ownedRef"
+        @click="onDeleteQuestionClick"
+        class="px-3 py-1 bg-red-400 hover:bg-red-500"
+      >
+        Delete
+      </button>
+
       <p class="font-bold text-blue-400">{{ questionRef?.title }}</p>
       <!-- <p class="text-sm text-gray-500">Id: {{ question?.id }}</p> -->
       <p class="text-sm text-gray-500">UserId: {{ questionRef?.userId }}</p>
