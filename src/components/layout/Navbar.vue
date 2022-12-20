@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
 import getUser from "../../composables/getUser";
 import useSignout from "../../composables/useSignout";
+
+const router = useRouter();
 
 const { user } = getUser();
 const { error, signout } = useSignout();
@@ -10,6 +13,7 @@ const onSignout = async () => {
 
   if (!error.value) {
     console.log("Signed out.");
+    router.push({ name: "Welcome" });
   }
 };
 </script>

@@ -9,7 +9,7 @@ import CommentForm from "../../components/questions/CommentForm.vue";
 import CommentItem from "../../components/questions/CommentItem.vue";
 import Spinner from "../../components/layout/Spinner.vue";
 import { formatDistanceToNow } from "date-fns";
-import { Comment } from "../../types";
+import { Comment, QuestionFormData } from "../../types";
 import router from "../../router";
 
 const route = useRoute();
@@ -167,6 +167,27 @@ const onDeleteQuestionClick = async () => {
   router.push({ name: "Questions" });
 };
 
+const onDeleteCommentClick = async (commentId: string) => {
+  const comments = questionRef.value?.comments as Comment[];
+  const updatedComments = comments.filter((item) => item.id !== commentId);
+
+  const data = {
+    comments: updatedComments,
+  };
+
+  await updateQuestion(questionId, data);
+  await init();
+};
+
+const onEditQuestionClick = async () => {
+  const { id, title, content, tags } = questionRef.value;
+
+  router.push({
+    name: "Edit Question",
+    params: { id },
+  });
+};
+
 await init();
 </script>
 
@@ -180,13 +201,21 @@ await init();
 
     <!-- Questıon -->
     <div class="border p-2 mb-4">
-      <button
-        v-if="ownedRef"
-        @click="onDeleteQuestionClick"
-        class="px-3 py-1 bg-red-400 hover:bg-red-500"
-      >
-        Delete
-      </button>
+      <div v-if="ownedRef" class="flex gap-2">
+        <button
+          @click="onEditQuestionClick"
+          class="px-3 py-1 bg-blue-400 hover:bg-blue-500"
+        >
+          Edit
+        </button>
+
+        <button
+          @click="onDeleteQuestionClick"
+          class="px-3 py-1 bg-red-400 hover:bg-red-500"
+        >
+          Delete
+        </button>
+      </div>
 
       <p class="font-bold text-blue-400">{{ questionRef?.title }}</p>
       <!-- <p class="text-sm text-gray-500">Id: {{ question?.id }}</p> -->
@@ -225,6 +254,7 @@ await init();
       <li v-for="comment in questionRef.comments" :key="comment.id">
         <CommentItem
           :comment="comment"
+          :onDeleteCommentClick="onDeleteCommentClick"
           @like-dislike="handleLikeDislikeComment"
         />
       </li>

@@ -7,8 +7,8 @@ export type Comment = {
   content: string;
   createdAt: Timestamp;
   likes: string[];
-  dislikes: string[]
-}
+  dislikes: string[];
+};
 
 export type Question = {
   id: string;
@@ -20,7 +20,7 @@ export type Question = {
   likes: string[];
   dislikes: string[];
   comments: Comment[];
-}
+};
 
 export type UpdateQuestionData = {
   title?: string;
@@ -28,4 +28,10 @@ export type UpdateQuestionData = {
   comments?: Comment[];
   likes?: string[];
   dislikes?: string[];
-}
+};
+
+export type QuestionFormData = {
+  title: string;
+  content: string;
+  tags: string[];
+};

@@ -7,6 +7,7 @@ import {
 import Welcome from "../views/Welcome.vue";
 import Questions from "../views/Questions.vue";
 import QuestionDetail from "../views/QuestionDetail.vue";
+import EditQuestion from "../views/EditQuestion.vue";
 import NewQuestion from "../views/NewQuestion.vue";
 import { auth } from "../firebase/config";
 
@@ -55,6 +56,12 @@ const routes = [
     path: "/questions/:id",
     name: "Question Detail",
     component: QuestionDetail,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/questions/edit/:id",
+    name: "Edit Question",
+    component: EditQuestion,
     beforeEnter: requireAuth,
   },
   {
