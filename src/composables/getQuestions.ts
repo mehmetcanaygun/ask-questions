@@ -10,7 +10,7 @@ const getQuestions = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, "questions"));
 
-    let results: Question[] = []
+    let results: Question[] = [];
 
     querySnapshot.forEach((doc) => {
       if (doc.data().createdAt) {
@@ -24,19 +24,17 @@ const getQuestions = async () => {
           likes: doc.data().likes,
           dislikes: doc.data().dislikes,
           comments: doc.data().comments,
-        })
+        });
       }
-    })
+    });
 
-    console.log(results)
-
-    questions.value = results
+    questions.value = results;
   } catch (err) {
-    console.log(err)
-    error.value = 'Questions could not be fetched.'
+    console.log(err);
+    error.value = "Questions could not be fetched.";
   }
 
-  return { questions, error }
-}
+  return { questions, error };
+};
 
 export default getQuestions;

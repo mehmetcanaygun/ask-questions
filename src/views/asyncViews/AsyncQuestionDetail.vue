@@ -109,6 +109,55 @@ const handleLikeDislikeComment = async (action: string, id: string) => {
   await init();
 };
 
+const handleLikeDislikeQuestion = async (action: string) => {
+  const likes: string[] = questionRef.value.likes || [];
+  const dislikes: string[] = questionRef.value.dislikes || [];
+
+  const isLiked = !!likes.find((item) => item === user.value?.uid);
+  const isDisliked = !!dislikes.find((item) => item === user.value?.uid);
+
+  let updatedLikes = [...likes];
+  let updatedDislikes = [...dislikes];
+
+  if (action === "like") {
+    // Do not make a request if it's already been liked
+    if (isLiked) return;
+
+    if (!isLiked && user.value) {
+      // Add like
+      updatedLikes.push(user.value.uid);
+    }
+
+    if (isDisliked && user.value) {
+      // Remove dislike
+      updatedDislikes = updatedDislikes.filter(
+        (item) => item !== user.value?.uid
+      );
+    }
+  } else {
+    // Do not make a request if it's already been disliked
+    if (isDisliked) return;
+
+    if (!isDisliked && user.value) {
+      // Add dislike
+      updatedDislikes.push(user.value.uid);
+    }
+
+    if (isLiked && user.value) {
+      // Remove like
+      updatedLikes = updatedLikes.filter((item) => item !== user.value?.uid);
+    }
+  }
+
+  const data = {
+    likes: updatedLikes,
+    dislikes: updatedDislikes,
+  };
+
+  await updateQuestion(questionId, data);
+  await init();
+};
+
 await init();
 </script>
 
@@ -136,10 +185,16 @@ await init();
 
       <!-- Buttons -->
       <div class="flex gap-2">
-        <button class="px-3 py-1 bg-green-200 hover:bg-green-300">
+        <button
+          @click="handleLikeDislikeQuestion('like')"
+          class="px-3 py-1 bg-green-200 hover:bg-green-300"
+        >
           Like - {{ questionRef?.likes.length }}
         </button>
-        <button class="px-3 py-1 bg-red-200 hover:bg-red-300">
+        <button
+          @click="handleLikeDislikeQuestion('dislike')"
+          class="px-3 py-1 bg-red-200 hover:bg-red-300"
+        >
           Dislike - {{ questionRef?.dislikes.length }}
         </button>
       </div>

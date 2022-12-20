@@ -1,14 +1,13 @@
 import { ref } from "vue";
 
 const useLoading = () => {
-  const isLoading = ref<boolean>(false)
+  const isLoading = ref<boolean>(false);
 
   const setLoading = (condition: boolean) => {
-    isLoading.value = condition
-    console.log(condition)
-  }
+    isLoading.value = condition;
+  };
 
-  return { isLoading, setLoading }
-}
+  return { isLoading, setLoading };
+};
 
 export default useLoading;
