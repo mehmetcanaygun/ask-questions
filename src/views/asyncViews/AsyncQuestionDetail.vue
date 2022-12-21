@@ -8,9 +8,15 @@ import useLoading from "../../composables/useLoading";
 import CommentForm from "../../components/questions/CommentForm.vue";
 import CommentItem from "../../components/questions/CommentItem.vue";
 import Spinner from "../../components/layout/Spinner.vue";
+import Header from "../../components/layout/Header.vue";
 import { formatDistanceToNow } from "date-fns";
 import { Comment, QuestionFormData } from "../../types";
 import router from "../../router";
+import EditSvg from "../../assets/edit.svg";
+import TrashSvg from "../../assets/trash.svg";
+import ThumbsUpSvg from "../../assets/thumbs-up.svg";
+import ThumbsDownSvg from "../../assets/thumbs-down.svg";
+import MessageCircleSvg from "../../assets/message-circle.svg";
 
 const route = useRoute();
 const questionId = route.params.id as string;
@@ -197,51 +203,71 @@ await init();
   </div>
 
   <div v-else class="container py-4">
-    <h1 class="text-2xl mb-4">Question Detail</h1>
+    <Header title="Question Detail" />
 
     <!-- Questıon -->
-    <div class="border p-2 mb-4">
-      <div v-if="ownedRef" class="flex gap-2">
-        <button
-          @click="onEditQuestionClick"
-          class="px-3 py-1 bg-blue-400 hover:bg-blue-500"
-        >
-          Edit
-        </button>
+    <div class="mb-10">
+      <div class="flex justify-between mb-2">
+        <!-- Title and create info -->
+        <div>
+          <p class="text-2xl text-secondary mb-1">{{ questionRef?.title }}</p>
 
-        <button
-          @click="onDeleteQuestionClick"
-          class="px-3 py-1 bg-red-400 hover:bg-red-500"
-        >
-          Delete
-        </button>
+          <p class="text-sm text-gray-400 mb-1">
+            <span class="text-light">{{ questionRef?.userId }}</span> asked
+            <span class="text-light">{{
+              questionRef?.createdAt &&
+              formatDistanceToNow(questionRef?.createdAt.toDate())
+            }}</span>
+            ago
+          </p>
+        </div>
+
+        <!-- Action buttons -->
+        <div v-if="ownedRef" class="flex items-start gap-2">
+          <button
+            @click="onEditQuestionClick"
+            class="px-4 py-1 bg-info hover:bg-infoDark text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
+          >
+            <img :src="EditSvg" alt="Pen" class="h-4" /> Edit
+          </button>
+
+          <button
+            @click="onDeleteQuestionClick"
+            class="px-4 py-1 bg-danger hover:bg-dangerDark text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
+          >
+            <img :src="TrashSvg" alt="Trash" class="h-4" /> Delete
+          </button>
+        </div>
       </div>
 
-      <p class="font-bold text-blue-400">{{ questionRef?.title }}</p>
-      <!-- <p class="text-sm text-gray-500">Id: {{ question?.id }}</p> -->
-      <p class="text-sm text-gray-500">UserId: {{ questionRef?.userId }}</p>
-      <p class="text-sm text-gray-500">
-        createdAt:
-        {{
-          questionRef?.createdAt &&
-          formatDistanceToNow(questionRef?.createdAt.toDate())
-        }}
-      </p>
-      <p class="font-bold text-lg my-2">{{ questionRef?.content }}</p>
+      <!-- Tags -->
+      <ul class="flex gap-1 text-[12px] mb-4">
+        <li
+          v-for="tag in questionRef?.tags"
+          class="px-2 rounded bg-secondary text-darker"
+        >
+          {{ tag }}
+        </li>
+      </ul>
 
-      <!-- Buttons -->
+      <p class="text-lg text-light mb-4">{{ questionRef?.content }}</p>
+
+      <!-- Like & dislike buttons -->
       <div class="flex gap-2">
         <button
           @click="handleLikeDislikeQuestion('like')"
-          class="px-3 py-1 bg-green-200 hover:bg-green-300"
+          class="px-4 py-1 border border-success hover:border-light text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
         >
-          Like - {{ questionRef?.likes.length }}
+          <img :src="ThumbsUpSvg" alt="Thumbs up" class="h-4" />
+          {{ questionRef?.likes.length }}
         </button>
+
         <button
           @click="handleLikeDislikeQuestion('dislike')"
-          class="px-3 py-1 bg-red-200 hover:bg-red-300"
+          class="px-4 py-1 border border-danger hover:border-light text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
         >
-          Dislike - {{ questionRef?.dislikes.length }}
+          <img :src="ThumbsDownSvg" alt="Thumbs down" class="h-4" />
+          {{ questionRef?.dislikes.length }}
         </button>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import useQuestion from "../../composables/useQuestion";
 import QuestionForm from "../../components/questions/QuestionForm.vue";
+import Header from "../../components/layout/Header.vue";
 import { QuestionFormData } from "../../types";
 
 const router = useRouter();
@@ -19,7 +20,7 @@ const handleSaveQuestion = async (data: QuestionFormData) => {
 
 <template>
   <div class="container py-4">
-    <h1 class="text-2xl mb-4">New Question</h1>
+    <Header title="New Question" />
 
     <QuestionForm :action="'create'" :handleSaveQuestion="handleSaveQuestion" />
 

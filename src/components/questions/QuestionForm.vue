@@ -54,6 +54,7 @@ const onTagClick = (e: MouseEvent) => {
 const onClearClick = () => {
   titleError.value = "";
   contentError.value = "";
+  tagError.value = "";
 
   title.value = "";
   content.value = "";
@@ -95,54 +96,54 @@ const onSaveClick = () => {
 </script>
 
 <template>
-  <form class="bg-gray-100 p-3 rounded">
+  <form class="bg-light p-4 rounded">
     <!-- Title -->
     <div class="flex flex-col mb-2">
-      <label for="title" class="text-sm mb-1">Title *</label>
+      <label for="title" class="text-sm text-dark mb-1">Title *</label>
       <input
         type="text"
         id="title"
         v-model="title"
         placeholder="Enter a descriptive title"
-        class="border p-2 rounded"
+        class="p-2 rounded bg-white shadow"
       />
-      <p v-if="titleError" class="text-sm text-red-400">
+      <p v-if="titleError" class="text-sm text-danger">
         {{ titleError }}
       </p>
     </div>
 
     <!-- Content -->
     <div class="flex flex-col mb-2">
-      <label for="content" class="text-sm mb-1">Explanation *</label>
+      <label for="content" class="text-sm text-dark mb-1">Explanation *</label>
       <textarea
         id="content"
         placeholder="Explain what you need"
         v-model="content"
-        class="border p-2 rounded"
+        class="p-2 rounded bg-white shadow"
       ></textarea>
-      <p v-if="contentError" class="text-sm text-red-400">
+      <p v-if="contentError" class="text-sm text-danger">
         {{ contentError }}
       </p>
     </div>
 
     <!-- Tags -->
     <div class="flex flex-col mb-2">
-      <label for="tags" class="text-sm mb-1">Tags *</label>
+      <label for="tags" class="text-sm text-dark mb-1">Tags *</label>
       <input
         type="text"
         id="tags"
         v-model="tagText"
         placeholder="Enter comma seperated tags (max 3)"
-        class="border p-2 rounded"
+        class="p-2 rounded bg-white shadow"
       />
-      <p v-if="tagError" class="text-sm text-red-400">
+      <p v-if="tagError" class="text-sm text-danger">
         {{ tagError }}
       </p>
       <div class="my-2">
         <span
           v-for="tag in tagArray"
           @click="(e) => onTagClick(e)"
-          class="text-sm bg-green-200 rounded px-2 py-1 mr-2 cursor-pointer hover:bg-green-300"
+          class="text-sm text-dark bg-secondary rounded px-2 py-1 mr-2 cursor-pointer hover:bg-secondaryDark"
           >{{ tag }}</span
         >
       </div>
@@ -152,13 +153,13 @@ const onSaveClick = () => {
     <div class="flex justify-end gap-2">
       <button
         type="button"
-        class="px-4 py-1 bg-gray-300 hover:bg-gray-400 rounded"
+        class="px-4 py-1 text-sm text-gray-600 bg-gray-300 hover:bg-gray-400 rounded shadow"
         @click.prevent="onClearClick"
       >
         Clear
       </button>
       <button
-        class="px-4 py-1 bg-blue-200 hover:bg-blue-300 rounded"
+        class="px-4 py-1 text-sm text-dark bg-blue-200 hover:bg-blue-300 rounded shadow"
         @click.prevent="onSaveClick"
       >
         Save

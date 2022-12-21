@@ -6,7 +6,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <div class="w-full min-h-screen overflow-x-hidden font-Nunito">
+  <div class="bg-darker w-full min-h-screen py-4 overflow-x-hidden font-Nunito">
     <Navbar />
     <RouterView :key="route.path" />
   </div>

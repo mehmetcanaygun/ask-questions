@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import getUser from "../../composables/getUser";
 import { formatDistanceToNow } from "date-fns";
+import TrashSvg from "../../assets/trash.svg";
+import ThumbsUpSvg from "../../assets/thumbs-up.svg";
+import ThumbsDownSvg from "../../assets/thumbs-down.svg";
 
 const { user } = getUser();
 
@@ -20,36 +23,43 @@ const onDislikeClick = () => {
 </script>
 
 <template>
-  <div class="border p-2 my-2">
-    <button
-      v-if="user?.uid === comment.userId"
-      @click="onDeleteCommentClick(comment.id)"
-      class="px-3 py-1 bg-red-400 hover:bg-red-500"
-    >
-      Delete
-    </button>
+  <div class="bg-dark rounded p-4 my-2">
+    <!-- Info and buttons -->
+    <div class="flex justify-between">
+      <p class="text-sm text-gray-400">
+        Sent by
+        <span class="font-bold text-blue-400">{{ comment.displayName }}</span
+        >, {{ formatDistanceToNow(comment.createdAt.toDate()) }} ago
+      </p>
 
-    <p class="text-lg">{{ comment.content }}</p>
-    <p class="text-sm text-gray-500">
-      Sent by
-      <span class="font-bold text-blue-400">{{ comment.displayName }}</span
-      >, {{ formatDistanceToNow(comment.createdAt.toDate()) }} ago
-    </p>
+      <button
+        v-if="user?.uid === comment.userId"
+        @click="onDeleteCommentClick(comment.id)"
+        class="px-4 py-1 bg-danger hover:bg-dangerDark text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
+      >
+        <img :src="TrashSvg" alt="Trash" class="h-4" /> Delete
+      </button>
+    </div>
 
-    <!-- Buttons -->
+    <!-- Comment -->
+    <p class="text-lg text-light">{{ comment.content }}</p>
+
+    <!-- Like and dislike buttons -->
     <div class="flex gap-2 mt-2">
       <button
         @click="onLikeClick"
-        class="px-3 py-1 bg-green-200 hover:bg-green-300"
+        class="px-4 py-1 border border-success hover:border-light text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
       >
-        Like - {{ comment.likes.length }}
+        <img :src="ThumbsUpSvg" alt="Thumbs up" class="h-4" />
+        {{ comment.likes.length }}
       </button>
 
       <button
         @click="onDislikeClick"
-        class="px-3 py-1 bg-red-200 hover:bg-red-300"
+        class="px-4 py-1 border border-danger hover:border-light text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
       >
-        Dislike - {{ comment.dislikes.length }}
+        <img :src="ThumbsDownSvg" alt="Thumbs down" class="h-4" />
+        {{ comment.dislikes.length }}
       </button>
     </div>
   </div>

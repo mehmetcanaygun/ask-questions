@@ -19,19 +19,38 @@ const onSignout = async () => {
 </script>
 
 <template>
-  <div class="bg-gray-700 text-white h-20">
-    <div class="container h-full flex justify-between items-center">
-      <div>
-        <a href="/" class="text-2xl">Ask Questions</a>
-        <p v-if="user" class="text-sm">Hello, {{ user.displayName }}</p>
-      </div>
-
-      <nav class="flex gap-3" v-if="user">
-        <RouterLink :to="{ name: 'New Question' }">Create</RouterLink>
-        <RouterLink :to="{ name: 'Questions' }">My Profile</RouterLink>
-        <button @click="onSignout">Log out</button>
-      </nav>
+  <div class="container h-20 flex justify-between items-center">
+    <div>
+      <a
+        href="/"
+        class="font-RubikGemstones text-2xl md:text-5xl text-primary hover:text-primaryDark duration-200"
+        >BrainFreeze</a
+      >
+      <p v-if="user" class="text-sm text-light">
+        Hi,
+        <span class="text-secondary font-bold">{{ user.displayName }}</span>
+      </p>
+      <p v-else class="text-light">Ask anything</p>
     </div>
+
+    <nav v-if="user" class="flex gap-1 md:gap-3 text-light">
+      <RouterLink
+        :to="{ name: 'New Question' }"
+        class="hover:text-secondary hover:-translate-y-0.5 duration-200"
+        >Create</RouterLink
+      >
+      <RouterLink
+        :to="{ name: 'Questions' }"
+        class="hover:text-secondary hover:-translate-y-0.5 duration-200"
+        >My Profile</RouterLink
+      >
+      <button
+        @click="onSignout"
+        class="hover:text-secondary hover:-translate-y-0.5 duration-200"
+      >
+        Log out
+      </button>
+    </nav>
   </div>
 </template>
 

@@ -35,16 +35,18 @@ const onSendClick = () => {
 </script>
 
 <template>
-  <form class="flex flex-col items-start bg-gray-100 p-4">
-    <label class="mb-1">Enter your comment</label>
-
-    <textarea v-model="comment" class="border w-full p-2"></textarea>
+  <form class="flex flex-col items-start rounded bg-light p-4">
+    <label class="mb-1 text-dark">Enter your comment</label>
+    <textarea
+      v-model="comment"
+      class="w-full p-2 rounded bg-white shadow mb-2"
+    ></textarea>
 
     <p v-if="commentError" class="text-sm text-red-400">{{ commentError }}</p>
 
     <button
       @click.prevent="onSendClick"
-      class="bg-blue-200 hover:bg-blue-300 px-4 py-1 mt-2"
+      class="px-4 py-1 bg-info hover:bg-infoDark text-sm text-dark rounded flex items-center justify-start gap-1 duration-200 shadow"
     >
       Send
     </button>
