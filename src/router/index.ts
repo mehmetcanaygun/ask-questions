@@ -9,6 +9,7 @@ import Questions from "../views/Questions.vue";
 import QuestionDetail from "../views/QuestionDetail.vue";
 import EditQuestion from "../views/EditQuestion.vue";
 import NewQuestion from "../views/NewQuestion.vue";
+import Profile from "../views/Profile.vue";
 import { auth } from "../firebase/config";
 
 const requireNoAuth = (
@@ -68,6 +69,12 @@ const routes = [
     path: "/questions/new",
     name: "New Question",
     component: NewQuestion,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/profile",
+    name: "My Profile",
+    component: Profile,
     beforeEnter: requireAuth,
   },
 ];

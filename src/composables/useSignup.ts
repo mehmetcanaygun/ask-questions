@@ -14,13 +14,13 @@ const signup = async (email: string, username: string, password: string) => {
       throw new Error("Could not complete the signup");
     }
 
-    await updateProfile(res.user, { displayName: username })
+    await updateProfile(res.user, { displayName: username });
     error.value = null;
 
     return res;
-  } catch (err) {
-    console.log(err);
-    error.value = "Could not sign user up.";
+  } catch (err: any) {
+    console.log(err.message);
+    error.value = err.message;
   }
 };
 

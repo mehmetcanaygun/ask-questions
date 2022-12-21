@@ -10,9 +10,15 @@ export type Comment = {
   dislikes: string[];
 };
 
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+};
+
 export type Question = {
   id: string;
-  userId: string;
+  user: User;
   createdAt: Timestamp;
   title: string;
   content: string;

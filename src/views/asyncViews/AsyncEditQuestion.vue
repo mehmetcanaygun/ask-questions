@@ -18,7 +18,7 @@ const { error: getQuestionErr, question } = await getQuestion(questionId);
 // Prevent editing when logged in user does not own the question
 const { user } = getUser();
 
-if (user.value?.uid !== question.value?.userId) {
+if (user.value?.uid !== question.value?.user?.id) {
   router.push({ name: "Questions" });
 }
 

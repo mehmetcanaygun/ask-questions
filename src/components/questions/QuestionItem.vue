@@ -32,7 +32,7 @@ const viewDetail = () => {
       <p class="text-secondary mb-1">{{ props.question?.title }}</p>
 
       <p class="text-sm text-gray-400 mb-1">
-        <span class="text-light">{{ props.question?.userId }}</span> asked
+        <span class="text-light">{{ props.question?.user?.name }}</span> asked
         <span class="text-light">{{
           props.question?.createdAt &&
           formatDistanceToNow(props.question?.createdAt.toDate())

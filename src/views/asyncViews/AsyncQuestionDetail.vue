@@ -36,7 +36,7 @@ const { updateQuestion, error: useQuestionErr, deleteQuestion } = useQuestion();
 const init = async () => {
   const { question, error } = await getQuestion(questionId);
 
-  ownedRef.value = question.value?.userId === user.value?.uid;
+  ownedRef.value = question.value?.user?.id === user.value?.uid;
 
   questionRef.value = question.value;
   errorRef.value = error.value;
@@ -213,7 +213,7 @@ await init();
           <p class="text-2xl text-secondary mb-1">{{ questionRef?.title }}</p>
 
           <p class="text-sm text-gray-400 mb-1">
-            <span class="text-light">{{ questionRef?.userId }}</span> asked
+            <span class="text-light">{{ questionRef?.user?.name }}</span> asked
             <span class="text-light">{{
               questionRef?.createdAt &&
               formatDistanceToNow(questionRef?.createdAt.toDate())

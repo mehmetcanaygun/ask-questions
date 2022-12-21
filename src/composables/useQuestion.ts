@@ -30,7 +30,11 @@ const useQuestion = () => {
         comments: [],
         likes: [],
         dislikes: [],
-        userId: user.value?.uid,
+        user: {
+          id: user.value?.uid,
+          name: user.value?.displayName,
+          email: user.value?.email,
+        },
         createdAt: timestamp,
       };
 

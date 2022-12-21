@@ -1,14 +1,30 @@
 import { ref } from "vue";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  CollectionReference,
+  DocumentData,
+} from "firebase/firestore";
 import { db } from "../firebase/config";
 import { Question } from "../types";
 
-const getQuestions = async () => {
+const getQuestions = async (userId?: string) => {
   const questions = ref<Question[]>([]);
   const error = ref<null | string>(null);
 
+  let searchQuery = collection(db, "questions");
+
+  if (userId) {
+    searchQuery = query(
+      collection(db, "questions"),
+      where("user.id", "==", userId)
+    ) as CollectionReference<DocumentData>;
+  }
+
   try {
-    const querySnapshot = await getDocs(collection(db, "questions"));
+    const querySnapshot = await getDocs(searchQuery);
 
     let results: Question[] = [];
 
@@ -16,7 +32,7 @@ const getQuestions = async () => {
       if (doc.data().createdAt) {
         results.push({
           id: doc.id,
-          userId: doc.data().userId,
+          user: doc.data().user,
           createdAt: doc.data().createdAt,
           title: doc.data().title,
           content: doc.data().content,

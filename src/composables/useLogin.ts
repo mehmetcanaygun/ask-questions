@@ -12,14 +12,14 @@ const login = async (email: string, password: string) => {
     error.value = null;
 
     return res;
-  } catch (err) {
-    console.log(err);
-    error.value = "Incorrect login credentials.";
+  } catch (err: any) {
+    console.log(err.message);
+    error.value = err.message;
   }
-}
+};
 
 const useLogin = () => {
-  return { error, login }
-}
+  return { error, login };
+};
 
 export default useLogin;

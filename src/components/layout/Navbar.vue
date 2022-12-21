@@ -33,21 +33,18 @@ const onSignout = async () => {
       <p v-else class="text-light">Ask anything</p>
     </div>
 
-    <nav v-if="user" class="flex gap-1 md:gap-3 text-light">
+    <nav v-if="user" class="flex text-light">
       <RouterLink
         :to="{ name: 'New Question' }"
-        class="hover:text-secondary hover:-translate-y-0.5 duration-200"
+        class="pr-2 hover:text-secondary duration-200"
         >Create</RouterLink
       >
       <RouterLink
-        :to="{ name: 'Questions' }"
-        class="hover:text-secondary hover:-translate-y-0.5 duration-200"
+        :to="{ name: 'My Profile' }"
+        class="border border-t-0 border-b-0 border-l-light border-r-light px-2 hover:text-secondary duration-200"
         >My Profile</RouterLink
       >
-      <button
-        @click="onSignout"
-        class="hover:text-secondary hover:-translate-y-0.5 duration-200"
-      >
+      <button @click="onSignout" class="pl-2 hover:text-secondary duration-200">
         Log out
       </button>
     </nav>

@@ -8,14 +8,29 @@ const { error, login } = useLogin();
 // Refs
 const email = ref("");
 const password = ref("");
+const emailError = ref<string>("");
+const passwordError = ref<string>("");
 
 const emit = defineEmits(["login"]);
 
 const onSubmit = async () => {
-  await login(email.value, password.value);
+  emailError.value = "";
+  passwordError.value = "";
 
-  if (!error.value) {
-    emit("login");
+  if (!email.value) {
+    emailError.value = "Email is required.";
+  }
+
+  if (!password.value) {
+    passwordError.value = "Password is required.";
+  }
+
+  if (!emailError.value && !passwordError.value) {
+    await login(email.value, password.value);
+
+    if (!error.value) {
+      emit("login");
+    }
   }
 };
 </script>
@@ -33,6 +48,7 @@ const onSubmit = async () => {
           v-model="email"
           class="p-2 rounded bg-dark text-light text-xl"
         />
+        <p v-if="emailError" class="text-sm text-danger">{{ emailError }}</p>
       </div>
 
       <div class="flex flex-col mb-4">
@@ -43,6 +59,9 @@ const onSubmit = async () => {
           v-model="password"
           class="p-2 rounded bg-dark text-light text-xl"
         />
+        <p v-if="passwordError" class="text-sm text-danger">
+          {{ passwordError }}
+        </p>
       </div>
 
       <button
@@ -51,6 +70,9 @@ const onSubmit = async () => {
       >
         Log in
       </button>
+
+      <!-- Error -->
+      <p v-if="error" class="text-sm text-danger mt-4">{{ error }}</p>
     </form>
   </div>
 </template>

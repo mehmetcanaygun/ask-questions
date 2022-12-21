@@ -9,14 +9,35 @@ const { error, signup } = useSignup();
 const email = ref<string>("");
 const username = ref<string>("");
 const password = ref<string>("");
+const emailError = ref<string>("");
+const usernameError = ref<string>("");
+const passwordError = ref<string>("");
 
 const emit = defineEmits(["signup"]);
 
 const onSubmit = async () => {
-  await signup(email.value, username.value, password.value);
+  emailError.value = "";
+  usernameError.value = "";
+  passwordError.value = "";
 
-  if (!error.value) {
-    emit("signup");
+  if (!email.value) {
+    emailError.value = "Email is required.";
+  }
+
+  if (!username.value) {
+    usernameError.value = "Username is required.";
+  }
+
+  if (!password.value) {
+    passwordError.value = "Password is required.";
+  }
+
+  if (!emailError.value && !usernameError.value && !passwordError.value) {
+    await signup(email.value, username.value, password.value);
+
+    if (!error.value) {
+      emit("signup");
+    }
   }
 };
 </script>
@@ -34,6 +55,7 @@ const onSubmit = async () => {
           v-model="email"
           class="p-2 rounded bg-dark text-light text-xl"
         />
+        <p v-if="emailError" class="text-sm text-danger">{{ emailError }}</p>
       </div>
 
       <div class="flex flex-col mb-2">
@@ -44,6 +66,9 @@ const onSubmit = async () => {
           v-model="username"
           class="p-2 rounded bg-dark text-light text-xl"
         />
+        <p v-if="usernameError" class="text-sm text-danger">
+          {{ usernameError }}
+        </p>
       </div>
 
       <div class="flex flex-col mb-4">
@@ -54,6 +79,9 @@ const onSubmit = async () => {
           v-model="password"
           class="p-2 rounded bg-dark text-light text-xl"
         />
+        <p v-if="passwordError" class="text-sm text-danger">
+          {{ passwordError }}
+        </p>
       </div>
 
       <button
@@ -62,6 +90,9 @@ const onSubmit = async () => {
       >
         Sign up
       </button>
+
+      <!-- Error -->
+      <p v-if="error" class="text-sm text-danger mt-4">{{ error }}</p>
     </form>
   </div>
 </template>
