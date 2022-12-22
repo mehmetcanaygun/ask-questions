@@ -17,23 +17,23 @@ const { page, totalPages, prevPage, nextPage } = usePagination(props.questions);
 
 const paginatedQuestions = ref<Question[]>();
 
-const init = (page: number) => {
-  const sliced = [...props.questions].slice(
-    page * PAGE_LIMIT,
-    page * PAGE_LIMIT + PAGE_LIMIT
+const init = () => {
+  // Paginate
+  paginatedQuestions.value = [...props.questions].slice(
+    page.value * PAGE_LIMIT,
+    page.value * PAGE_LIMIT + PAGE_LIMIT
   );
-  paginatedQuestions.value = sliced;
 };
 
 const handlePagination = (type: string) => {
   type === PAGINATION_TYPE.prev ? prevPage() : nextPage();
 };
 
-watch(page, (ref, prevRef) => {
-  init(ref);
+watch([page], (refs, prevRefs) => {
+  init();
 });
 
-init(page.value);
+init();
 </script>
 
 <template>

@@ -25,7 +25,10 @@ const onNextClick = async () => {
 </script>
 
 <template>
-  <div class="rounded py-4 mt-4 text-light flex justify-end items-center gap-2">
+  <div
+    v-if="totalPages > 0"
+    class="rounded py-4 mt-4 text-light flex justify-end items-center gap-2"
+  >
     <button
       @click="onPrevClick"
       class="bg-secondary hover:bg-secondaryDark px-2 text-dark rounded duration-200"
