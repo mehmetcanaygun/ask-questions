@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import getQuestions from "../../composables/getQuestions";
-import QuestionItem from "../../components/questions/QuestionItem.vue";
+import QuestionList from "../../components/questions/QuestionList.vue";
 import Header from "../../components/layout/Header.vue";
 
-const { questions, error } = await getQuestions();
+const { questions, error } = await getQuestions({});
 </script>
 
 <template>
@@ -12,13 +12,7 @@ const { questions, error } = await getQuestions();
 
     <!-- FILTERS -->
 
-    <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <QuestionItem
-        v-for="question in questions"
-        :question="question"
-        :key="question.id"
-      />
-    </ul>
+    <QuestionList :questions="questions" />
 
     <!-- Error -->
     <p v-if="error" class="text-light p-4 border-danger">{{ error }}</p>

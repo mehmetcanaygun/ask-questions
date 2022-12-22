@@ -1,31 +1,32 @@
 import { ref } from "vue";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  CollectionReference,
-  DocumentData,
-} from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { Question } from "../types";
 
-const getQuestions = async (userId?: string) => {
+type GetQuestionOptions = {
+  userId?: string;
+  lastItem?: Question;
+  firstItem?: Question;
+};
+
+const getQuestions = async (options: GetQuestionOptions) => {
   const questions = ref<Question[]>([]);
   const error = ref<null | string>(null);
 
-  let searchQuery = collection(db, "questions");
+  let searchQuery;
+  const dbRef = collection(db, "questions");
+  const orderOption = orderBy("createdAt", "desc");
 
-  if (userId) {
-    searchQuery = query(
-      collection(db, "questions"),
-      where("user.id", "==", userId)
-    ) as CollectionReference<DocumentData>;
+  // Default query
+  searchQuery = query(dbRef, orderOption);
+
+  // Query for user profile
+  if (options?.userId) {
+    searchQuery = query(dbRef, where("user.id", "==", options?.userId));
   }
 
   try {
     const querySnapshot = await getDocs(searchQuery);
-
     let results: Question[] = [];
 
     querySnapshot.forEach((doc) => {
@@ -45,8 +46,8 @@ const getQuestions = async (userId?: string) => {
     });
 
     questions.value = results;
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    console.log(err.message);
     error.value = "Questions could not be fetched.";
   }
 

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import getUser from "../../composables/getUser";
 import getQuestions from "../../composables/getQuestions";
-import QuestionItem from "../../components/questions/QuestionItem.vue";
 import Header from "../../components/layout/Header.vue";
+import QuestionList from "../../components/questions/QuestionList.vue";
 
-// Logged in user
-const { user } = getUser();
-
-const { questions, error } = await getQuestions(user.value?.uid);
+const { user } = getUser(); // Logged in user
+const { questions, error } = await getQuestions({
+  userId: user.value?.uid,
+});
 </script>
 
 <template>
@@ -23,14 +23,7 @@ const { questions, error } = await getQuestions(user.value?.uid);
       </p>
     </div>
 
-    <!-- User's questions -->
-    <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <QuestionItem
-        v-for="question in questions"
-        :question="question"
-        :key="question.id"
-      />
-    </ul>
+    <QuestionList :questions="questions" />
 
     <!-- Error -->
     <p v-if="error" class="text-light p-4 border-danger">{{ error }}</p>
