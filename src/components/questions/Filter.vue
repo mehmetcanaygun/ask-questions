@@ -16,7 +16,7 @@ watch(filter, (ref, prevRef) => {
 </script>
 
 <template>
-  <div class="rounded mb-4 text-light flex flex-col">
+  <div class="rounded mb-4 text-light flex flex-col animate-slideDown">
     <label class="text-sm text-light mb-1">Filter by title or tag</label>
     <input
       type="text"

@@ -96,7 +96,7 @@ const onSaveClick = () => {
 </script>
 
 <template>
-  <form class="bg-light p-4 rounded">
+  <form class="bg-light p-4 rounded animate-fadeIn">
     <!-- Title -->
     <div class="flex flex-col mb-2">
       <label for="title" class="text-sm text-dark mb-1">Title *</label>

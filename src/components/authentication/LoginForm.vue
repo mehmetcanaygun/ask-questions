@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import useLogin from "../../composables/useLogin";
+import useLoading from "../../composables/useLoading";
 import Header from "../layout/Header.vue";
+import Spinner from "../layout/Spinner.vue";
 
 const { error, login } = useLogin();
+const { isLoading, setLoading } = useLoading();
 
 // Refs
 const email = ref("");
@@ -26,20 +29,26 @@ const onSubmit = async () => {
   }
 
   if (!emailError.value && !passwordError.value) {
+    setLoading(true);
+
     await login(email.value, password.value);
 
     if (!error.value) {
       emit("login");
     }
+
+    setLoading(false);
   }
 };
 </script>
 
 <template>
+  <Spinner v-if="isLoading" />
+
   <div class="py-8">
     <Header title="Log in" />
 
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="onSubmit" class="animate-fadeIn">
       <div class="flex flex-col mb-2">
         <label for="email" class="text-sm text-light mb-1">Email</label>
         <input

@@ -35,7 +35,7 @@ const onSendClick = () => {
 </script>
 
 <template>
-  <form class="flex flex-col items-start rounded bg-light p-4">
+  <form class="flex flex-col items-start rounded bg-light p-4 animate-slideUp">
     <label class="mb-1 text-dark">Enter your comment</label>
     <textarea
       v-model="comment"

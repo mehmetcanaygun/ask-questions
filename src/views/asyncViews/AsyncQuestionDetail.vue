@@ -1,25 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import getUser from "../../composables/getUser";
 import getQuestion from "../../composables/getQuestion";
 import useQuestion from "../../composables/useQuestion";
 import useLoading from "../../composables/useLoading";
+import Question from "../../components/questions/Question.vue";
 import CommentForm from "../../components/questions/CommentForm.vue";
-import CommentItem from "../../components/questions/CommentItem.vue";
+import CommentList from "../../components/questions/CommentList.vue";
 import Spinner from "../../components/layout/Spinner.vue";
 import Header from "../../components/layout/Header.vue";
-import { formatDistanceToNow } from "date-fns";
-import { Comment, QuestionFormData } from "../../types";
-import router from "../../router";
-import EditSvg from "../../assets/edit.svg";
-import TrashSvg from "../../assets/trash.svg";
-import ThumbsUpSvg from "../../assets/thumbs-up.svg";
-import ThumbsDownSvg from "../../assets/thumbs-down.svg";
-import MessageCircleSvg from "../../assets/message-circle.svg";
+import { Comment } from "../../types";
+import { v4 as uuidv4 } from "uuid";
 
 const route = useRoute();
 const questionId = route.params.id as string;
+
+const router = useRouter();
 
 const questionRef = ref();
 const errorRef = ref();
@@ -29,9 +26,12 @@ const ownedRef = ref<boolean>(false);
 const { user } = getUser();
 
 // Get loading state
-const { isLoading } = useLoading();
+const { isLoading, setLoading } = useLoading();
 
 const { updateQuestion, error: useQuestionErr, deleteQuestion } = useQuestion();
+
+// Random id to pass as a key to CommentList
+const commentListKey = ref<string>(uuidv4());
 
 const init = async () => {
   const { question, error } = await getQuestion(questionId);
@@ -40,6 +40,8 @@ const init = async () => {
 
   questionRef.value = question.value;
   errorRef.value = error.value;
+
+  commentListKey.value = uuidv4();
 };
 
 const handleAddComment = async (comment: Comment) => {
@@ -51,9 +53,12 @@ const handleAddComment = async (comment: Comment) => {
     comments: updatedComments,
   };
 
-  await updateQuestion(questionId, data);
+  setLoading(true);
 
+  await updateQuestion(questionId, data);
   await init();
+
+  setLoading(false);
 };
 
 const handleLikeDislikeComment = async (action: string, id: string) => {
@@ -115,8 +120,12 @@ const handleLikeDislikeComment = async (action: string, id: string) => {
     comments: updatedComments,
   };
 
+  setLoading(true);
+
   await updateQuestion(questionId, data);
   await init();
+
+  setLoading(false);
 };
 
 const handleLikeDislikeQuestion = async (action: string) => {
@@ -164,12 +173,19 @@ const handleLikeDislikeQuestion = async (action: string) => {
     dislikes: updatedDislikes,
   };
 
+  setLoading(true);
+
   await updateQuestion(questionId, data);
   await init();
+
+  setLoading(false);
 };
 
 const onDeleteQuestionClick = async () => {
+  setLoading(true);
   await deleteQuestion(questionRef.value.id);
+  setLoading(false);
+
   router.push({ name: "Questions" });
 };
 
@@ -181,8 +197,12 @@ const onDeleteCommentClick = async (commentId: string) => {
     comments: updatedComments,
   };
 
+  setLoading(true);
+
   await updateQuestion(questionId, data);
   await init();
+
+  setLoading(false);
 };
 
 const onEditQuestionClick = async () => {
@@ -198,93 +218,27 @@ await init();
 </script>
 
 <template>
-  <div v-if="isLoading">
-    <Spinner />
-  </div>
+  <Spinner v-if="isLoading" />
 
-  <div v-else class="container py-4">
+  <div class="container py-4">
     <Header title="Question Detail" />
 
-    <!-- Questıon -->
-    <div class="mb-10">
-      <div class="flex justify-between mb-2">
-        <!-- Title and create info -->
-        <div>
-          <p class="text-2xl text-secondary mb-1">{{ questionRef?.title }}</p>
+    <Question
+      :question="questionRef"
+      :owned="ownedRef"
+      :onEditQuestionClick="onEditQuestionClick"
+      :onDeleteQuestionClick="onDeleteQuestionClick"
+      :handleLikeDislikeQuestion="handleLikeDislikeQuestion"
+    />
 
-          <p class="text-sm text-gray-400 mb-1">
-            <span class="text-light">{{ questionRef?.user?.name }}</span> asked
-            <span class="text-light">{{
-              questionRef?.createdAt &&
-              formatDistanceToNow(questionRef?.createdAt.toDate())
-            }}</span>
-            ago
-          </p>
-        </div>
-
-        <!-- Action buttons -->
-        <div v-if="ownedRef" class="flex items-start gap-2">
-          <button
-            @click="onEditQuestionClick"
-            class="px-4 py-1 bg-info hover:bg-infoDark text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
-          >
-            <img :src="EditSvg" alt="Pen" class="h-4" /> Edit
-          </button>
-
-          <button
-            @click="onDeleteQuestionClick"
-            class="px-4 py-1 bg-danger hover:bg-dangerDark text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
-          >
-            <img :src="TrashSvg" alt="Trash" class="h-4" /> Delete
-          </button>
-        </div>
-      </div>
-
-      <!-- Tags -->
-      <ul class="flex gap-1 text-[12px] mb-4">
-        <li
-          v-for="tag in questionRef?.tags"
-          class="px-2 rounded bg-secondary text-darker"
-        >
-          {{ tag }}
-        </li>
-      </ul>
-
-      <p class="text-lg text-light mb-4">{{ questionRef?.content }}</p>
-
-      <!-- Like & dislike buttons -->
-      <div class="flex gap-2">
-        <button
-          @click="handleLikeDislikeQuestion('like')"
-          class="px-4 py-1 border border-success hover:border-light text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
-        >
-          <img :src="ThumbsUpSvg" alt="Thumbs up" class="h-4" />
-          {{ questionRef?.likes.length }}
-        </button>
-
-        <button
-          @click="handleLikeDislikeQuestion('dislike')"
-          class="px-4 py-1 border border-danger hover:border-light text-sm text-light rounded flex items-center justify-start gap-1 duration-200"
-        >
-          <img :src="ThumbsDownSvg" alt="Thumbs down" class="h-4" />
-          {{ questionRef?.dislikes.length }}
-        </button>
-      </div>
-    </div>
-
-    <!-- Comment Form -->
     <CommentForm @add-comment="handleAddComment" />
 
-    <!-- Comments -->
-    <ul v-if="questionRef.comments && questionRef.comments.length > 0">
-      <li v-for="comment in questionRef.comments" :key="comment.id">
-        <CommentItem
-          :comment="comment"
-          :onDeleteCommentClick="onDeleteCommentClick"
-          @like-dislike="handleLikeDislikeComment"
-        />
-      </li>
-    </ul>
+    <CommentList
+      :key="commentListKey"
+      :comments="questionRef.comments"
+      :handleLikeDislikeComment="handleLikeDislikeComment"
+      :onDeleteCommentClick="onDeleteCommentClick"
+    />
   </div>
 </template>
 

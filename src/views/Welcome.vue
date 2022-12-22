@@ -17,10 +17,6 @@ const redirectToQuestions = () => {
 
 <template>
   <div class="container">
-    <!-- <div>
-      <img :src="WelcomeImg" alt="Freezing texture" />
-    </div> -->
-
     <div>
       <div v-if="showLogin">
         <LoginForm @login="redirectToQuestions" />

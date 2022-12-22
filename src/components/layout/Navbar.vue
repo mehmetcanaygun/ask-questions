@@ -20,7 +20,7 @@ const onSignout = async () => {
 
 <template>
   <div class="container h-20 flex justify-between items-center">
-    <div>
+    <div class="animate-slideRight">
       <a
         href="/"
         class="font-RubikGemstones text-2xl md:text-5xl text-primary hover:text-primaryDark duration-200"
@@ -33,7 +33,7 @@ const onSignout = async () => {
       <p v-else class="text-light">Ask anything</p>
     </div>
 
-    <nav v-if="user" class="flex text-light">
+    <nav v-if="user" class="flex text-light animate-slideLeft">
       <RouterLink
         :to="{ name: 'New Question' }"
         class="pr-2 hover:text-secondary duration-200"

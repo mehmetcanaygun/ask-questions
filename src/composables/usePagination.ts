@@ -1,12 +1,14 @@
 import { ref } from "vue";
-import { Question } from "../types";
+import { Question, Comment } from "../types";
 import { PAGE_LIMIT } from "../constants";
 
-const usePagination = (questions: Question[]) => {
+type List = Question[] | Comment[];
+
+const usePagination = (list: List) => {
   const page = ref<number>(0);
 
-  const totalQuestions = questions.length;
-  const totalPages = Math.ceil(totalQuestions / PAGE_LIMIT);
+  const totalItems = list.length;
+  const totalPages = Math.ceil(totalItems / PAGE_LIMIT);
 
   const prevPage = () => {
     if (page.value > 0) {
